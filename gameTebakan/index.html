@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameTebakan</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+        }
+
+        .game-container {
+            background-color: #fff;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid green;
+        }
+
+        h1 {
+            color: #0080ff;
+            padding: 10px;
+            border-radius: 50%;
+            border-bottom: 4px solid orange;
+            border-right: 4px solid orange;
+        }
+
+        .hiding-spots {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .spot {
+            width: 60px;
+            height: 70px;
+            background-color: #d3d3d3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius:50%;
+        }
+
+        button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 45px;
+            background-color: green;
+            color: #fff;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            border-bottom:3px solid orange;
+            border-right:3px solid orange;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            padding-top:6px;
+            margin-left:10px;
+            
+            
+            
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px 30px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+      
+
+        .submit {
+            background-color: #0080ff;
+            color: white;
+        }
+
+        #guessInput {
+            padding: 10px;
+            font-size: 16px;
+            width: 60%;
+            height:auto;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .marmot-img {
+            width: 150px;
+            margin-top: 20px;
+        }
+    #spot1{
+        background-color:#000; 
+        color:#fff;
+        border-left:4px solid orange;
+        border-right:4px solid orange;
+    }
+#spot2{
+        background-color:#000; 
+        color:#fff;
+        border-left:4px solid green;
+        border-right:4px solid green;
+    }
+#spot3{
+        background-color:#000; 
+        color:#fff;
+        border-left:4px solid red;
+        border-right:4px solid red;
+    }
+#spot4{
+        background-color:#000; 
+        color:#fff;
+        border-left:4px solid blue;
+        border-right:4px solid blue;
+    }
+#spot5{
+        background-color:#000; 
+        color:#fff;
+        border-left:4px solid gold;
+        border-right:4px solid gold;
+    }
+    #closeResultModal{
+        position:relative;
+        margin-right:-300px;
+        margin-top:-180px;
+        color:red;
+        font-size: 34px;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px 30px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+    }
+    #closeInputModal{
+        background-color:red;
+        color:#fff;
+        font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px 30px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+    }
+    #resultModal{
+        font-size:20px;
+        font-weight:bold;
+        color:green;
+    }
+    #modalMessage1{
+        color:red;
+    }
+    .marmut{
+        display:flex;
+        flex-direction:row;
+        border: 1px solid #0080ff;
+        border-radius:5px;
+        margin-bottom:20px;
+    }
+    #marmut1{
+        width:100px;
+        height:auto;
+    }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Game Tebakan</h1>
+        <div class="marmut">
+            <img id="marmut1" src="marmut.jpeg" alt="Marmut">
+            <p>Di Goa manakah Marmut Bersembunyi?</p>
+        </div>
+
+        <div class="hiding-spots">
+            <div class="spot" id="spot1">[Goa 1]</div>
+            <div class="spot" id="spot2">[Goa 2]</div>
+            <div class="spot" id="spot3">[Goa 3]</div>
+            <div class="spot" id="spot4">[Goa 4]</div>
+            <div class="spot" id="spot5">[Goa 5]</div>
+        </div>
+
+        <button id="guessBtn">Tebak</button>
+    </div>
+
+    <!-- Modal Tebakan -->
+    <div id="inputModal" class="modal">
+        <div class="modal-content">
+            <h2>Masukkan Tebakan Anda</h2>
+            <input type="number" id="guessInput" placeholder="Masukkan angka 1-5">
+            <br>
+            <button class="submit" id="submitGuess">Submit</button>
+            <button class="close" id="closeInputModal">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Hasil -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span id="closeResultModal" class="close">&times;</span>
+            <p id="modalMessage"></p>
+            <p id="modalMessage1"></p>
+            <img id="marmotImage" class="marmot-img" src="" alt="" style="display: none;">
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" src="apt.mp3" loop></audio>
+
+    <script>
+        window.addEventListener('load', function () {
+            // Ambil elemen-elemen dari DOM
+            const guessBtn = document.getElementById('guessBtn');
+            const inputModal = document.getElementById('inputModal');
+            const resultModal = document.getElementById('resultModal');
+            const submitGuess = document.getElementById('submitGuess');
+            const closeInputModal = document.getElementById('closeInputModal');
+            const closeResultModal = document.getElementById('closeResultModal');
+            const guessInput = document.getElementById('guessInput');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalMessage1 = document.getElementById('modalMessage1');
+            const marmotImage = document.getElementById('marmotImage');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+
+            // Menyembunyikan modal hasil saat awal
+            resultModal.style.display = 'none';
+
+            // Fungsi untuk memulai game
+            let correctSpot = Math.floor(Math.random() * 5) + 1; // Pilih spot secara acak
+
+            // Ketika tombol Tebak ditekan
+            guessBtn.addEventListener('click', function () {
+                inputModal.style.display = 'flex'; // Tampilkan modal tebakan
+                backgroundMusic.play(); // Mainkan musik
+            });
+
+            // Ketika tombol Submit pada modal ditekan
+            submitGuess.addEventListener('click', function () {
+                let userGuess = parseInt(guessInput.value);
+                
+                // Validasi input
+                if (isNaN(userGuess) || userGuess < 1 || userGuess > 5) {
+                    alert("Masukkan angka yang valid antara 1 dan 5!");
+                    return;
+                }
+
+                // Cek tebakan
+                inputModal.style.display = 'none'; // Sembunyikan modal input
+                resultModal.style.display = 'flex'; // Tampilkan modal hasil
+                
+                if (userGuess === correctSpot) {
+                    modalMessage.textContent = "Tebakan Anda Benar!";
+                    marmotImage.src = "marmut.jpeg"; // Ganti gambar marmut jika benar
+                    marmotImage.style.display = 'block';
+                } else {
+                    modalMessage.textContent = "Tebakan Anda Salah!";
+                    modalMessage1.textContent = `Marmut bersembunyi di Goa ${correctSpot}`;
+                    marmotImage.src = "marmut.jpeg"; // Ganti gambar marmut jika salah
+                    marmotImage.style.display = 'block';
+                }
+            });
+
+            // Menutup modal input
+            closeInputModal.addEventListener('click', function () {
+                inputModal.style.display = 'none';
+            });
+
+            // Menutup modal hasil
+            closeResultModal.addEventListener('click', function () {
+                resultModal.style.display = 'none';
+                guessInput.value = ''; // Mengosongkan input
+            });
+        });
+    </script>
+      <script>
+        // Daftar service worker
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js")
+    .then((registration) => {
+        console.log("Service Worker terdaftar dengan sukses:", registration.scope);
+    })
+    .catch((error) => {
+        console.log("Service Worker pendaftaran gagal:", error);
+    });
+}
+    </script>
+</body>
+</html>
